@@ -35,7 +35,7 @@ Stwórz PRD dla nowej funkcjonalności: **[tutaj opisz aplikację albo funkcjona
 
 Przeprowadź ze mną wywiad. Zadawaj mi pytania jedno po drugim, aż poznasz cały potrzebny kontekst do stworzenia dokumentu dla mojej aplikacji.
 
-Nie implementuj kodu. Pracuj w trybie planowania.
+Nie implementuj kodu. Pracuj w trybie planowania i nie używaj na tym etapie żadnego skilla.
 
 Gdy będziesz miał wystarczający kontekst, przejdź do jednego z poniższych działań:
 - jeśli to pierwszy PRD projektu, wypełnij plik `prd/000-initial-prd.md`,
