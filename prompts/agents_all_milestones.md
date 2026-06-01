@@ -168,6 +168,7 @@ Zadanie operations_agent:
 - review_agent ocenia i nie edytuje plików
 - operations_agent finalizuje, ale nie zmienia kodu aplikacji
 - nie przełączaj wariantu modelu w środku batcha bez handoffu
+- nie traktuj zmiany `model_reasoning_effort` między subagentami jako model switch, jeśli wariant modelu pozostaje ten sam
 - nie rozszerzaj zakresu milestone’ów
 - nie zgaduj niejasnych wymagań
 - nie wykonuj finalize, commit ani push po pojedynczym milestone ani po pojedynczym batchu
