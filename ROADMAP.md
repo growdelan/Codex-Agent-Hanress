@@ -29,3 +29,7 @@ Milestone można oznaczyć jako `done`, gdy jego kryteria akceptacji są spełni
 -
 
 > Dla nowego produktu rozważ minimalny pionowy slice jako pierwszy milestone, jeśli pozwala zweryfikować najważniejsze założenie end-to-end. Nie jest to obowiązkowe dla bibliotek, migracji, badań ani zmian infrastrukturalnych.
+
+## Ukończone milestone'y
+
+Zachowuj tutaj tylko krótką listę ukończonych elementów. Pełne szczegóły starszych milestone'ów przenoś do `docs/archive/roadmap/` i dodawaj bezpośredni link do właściwego pliku.

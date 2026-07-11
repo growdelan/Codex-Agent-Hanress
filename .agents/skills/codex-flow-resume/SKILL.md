@@ -5,9 +5,11 @@ description: Odtwórz stan istniejącego projektu po rozpoczęciu nowej sesji lu
 
 # Wznowienie projektu
 
-1. Przeczytaj `STATUS.md` i właściwy fragment `ROADMAP.md`.
-2. Doczytaj `spec.md`, `AGENTS.md`, diff lub kod tylko wtedy, gdy są potrzebne do zweryfikowania bieżącego stanu.
-3. Porównaj dokumentację z faktycznym stanem repo. Nie zakładaj, że status jest aktualny.
-4. Nie modyfikuj plików.
+1. Uruchom `./scripts/check-context-size.sh`, a następnie przeczytaj `STATUS.md`.
+2. Z `ROADMAP.md` odczytaj tylko milestone'y `in_progress`, `planned`, `blocked` oraz krótki indeks ukończonych prac. Nie czytaj archiwum domyślnie.
+3. Potraktuj `spec.md` jako indeks. Doczytaj tylko wskazane sekcje lub dokumenty z `docs/spec/` i `docs/decisions/`, które są potrzebne do najbliższej decyzji.
+4. Doczytaj `AGENTS.md`, diff lub kod tylko wtedy, gdy są potrzebne do zweryfikowania bieżącego stanu.
+5. Porównaj dokumentację z faktycznym stanem repo. Nie zakładaj, że status jest aktualny.
+6. Jeśli skrypt zgłasza przekroczenie limitu, uwzględnij `$codex-flow-compact-context` jako zalecany krok, ale nie modyfikuj plików podczas resume.
 
-Zwróć krótki brief: cel projektu, aktualny zakres, co zrobiono, ostatnią walidację, blokery, najbliższy krok i pliki potrzebne do jego wykonania.
+Zwróć krótki brief: cel projektu, aktualny zakres, co zrobiono, ostatnią walidację, blokery, najbliższy krok, pliki potrzebne do jego wykonania i ewentualną potrzebę kompakcji.

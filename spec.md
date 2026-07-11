@@ -26,6 +26,15 @@ Każda istotna decyzja powinna zawierać:
 
 Dokumentuj tutaj nowe zależności, zmianę granic komponentów, sposobu uruchamiania lub istotnego zachowania systemu.
 
+## Dokumenty szczegółowe
+
+Gdy specyfikacja rośnie, zachowaj tutaj krótki indeks aktualnych dokumentów zamiast kopiować ich pełną treść:
+
+- Obszary domenowe i kontrakty: `docs/spec/`
+- Samodzielne decyzje techniczne: `docs/decisions/`
+
+Dokumenty szczegółowe są częścią aktualnej specyfikacji, a nie archiwum. Linkuj tylko pliki istniejące i potrzebne do zrozumienia systemu.
+
 ## Jakość i kryteria akceptacji
 
 - Każdy milestone ma mierzalne kryteria akceptacji.

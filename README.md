@@ -1,6 +1,6 @@
 # Codex Flow — lekki harness dla projektów Python
 
-To repozytorium jest szablonem współpracy z aktualnym Codexem. Zachowuje trwałe zasady projektu, planowanie z PRD, implementację ograniczoną do milestone'u, walidację i niezależne review, ale nie dubluje natywnej orkiestracji, zarządzania modelem ani kompakcji kontekstu Codex.
+To repozytorium jest szablonem współpracy z aktualnym Codexem. Zachowuje trwałe zasady projektu, planowanie z PRD, implementację ograniczoną do milestone'u, walidację i niezależne review, ale nie dubluje natywnej orkiestracji, zarządzania modelem ani kompakcji historii rozmowy przez Codex.
 
 ## Założenia
 
@@ -19,6 +19,7 @@ Skopiuj do projektu:
 ```text
 .agents/
 .codex/
+docs/
 prd/
 scripts/
 AGENTS.md
@@ -61,6 +62,7 @@ Przeprowadź ze mną wywiad. Zadawaj jedno pytanie naraz, aż poznasz kontekst p
 | `codex-flow-review` | Niezależne, read-only review ostatnich zmian |
 | `codex-flow-address-review` | Minimalne poprawki wynikające z review |
 | `codex-flow-run-roadmap` | Sekwencyjna realizacja wszystkich milestone'ów `planned` z walidacją i review |
+| `codex-flow-compact-context` | Kompakcja przerośniętych plików kontekstu bez utraty aktywnych ustaleń |
 | `codex-flow-publish` | Dokumentacja, commit i opcjonalny push na jawne polecenie |
 
 ## Subagenci
@@ -78,7 +80,26 @@ Uruchom:
 ./scripts/verify.sh
 ```
 
-Skrypt nie zgaduje narzędzi projektu. Uruchamia `unittest` tylko wtedy, gdy istnieje katalog `tests/`, a dodatkowe polecenia należy dodać jawnie po skonfigurowaniu projektu.
+Skrypt nie zgaduje narzędzi projektu. Najpierw kontroluje rozmiar głównych plików kontekstu, następnie uruchamia `unittest` tylko wtedy, gdy istnieje katalog `tests/`. Dodatkowe polecenia należy dodać jawnie po skonfigurowaniu projektu.
+
+## Limity kontekstu i archiwizacja
+
+`./scripts/check-context-size.sh` sprawdza miękkie progi:
+
+| Plik | Linie | Rozmiar |
+|---|---:|---:|
+| `STATUS.md` | 150 | 12 KB |
+| `ROADMAP.md` | 350 | 30 KB |
+| `spec.md` | 500 | 40 KB |
+
+Przekroczenie progu generuje ostrzeżenie, ale nie przerywa walidacji. Użyj wtedy `$codex-flow-compact-context`:
+
+- `STATUS.md` pozostaje krótką pamięcią bieżącej pracy; zamknięta historia pozostaje w Git,
+- szczegóły ukończonych milestone'ów trafiają do `docs/archive/roadmap/`,
+- `spec.md` pozostaje indeksem aktualnej prawdy, a szczegóły trafiają do `docs/spec/` i `docs/decisions/`,
+- `resume` nie czyta archiwum ani niepowiązanych dokumentów domyślnie.
+
+Projekt może zmienić progi przez zmienne `STATUS_MAX_LINES`, `STATUS_MAX_BYTES`, `ROADMAP_MAX_LINES`, `ROADMAP_MAX_BYTES`, `SPEC_MAX_LINES` i `SPEC_MAX_BYTES` bez modyfikowania skryptu.
 
 ## Zasady publikacji
 

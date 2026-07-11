@@ -4,6 +4,8 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+"$repo_root/scripts/check-context-size.sh"
+
 if ! command -v uv >/dev/null 2>&1; then
     echo "Błąd: uv nie jest dostępny. Zainstaluj uv zgodnie z README.md." >&2
     exit 1

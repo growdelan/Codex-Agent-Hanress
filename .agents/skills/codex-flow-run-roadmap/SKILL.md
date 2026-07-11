@@ -7,7 +7,7 @@ description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze s
 
 ## Przygotowanie
 
-1. Przeczytaj `AGENTS.md`, `STATUS.md`, całe `ROADMAP.md` oraz istotne sekcje `spec.md`.
+1. Uruchom `./scripts/check-context-size.sh`. Przeczytaj `AGENTS.md`, `STATUS.md`, aktywne milestone'y w `ROADMAP.md` oraz istotne sekcje lub odnośniki z `spec.md`; nie czytaj archiwum domyślnie.
 2. Sprawdź stan repo i nie włączaj do pracy niepowiązanych zmian użytkownika.
 3. Zbierz rzeczywiste milestone'y `planned` w kolejności zależności. Pomiń wpisy szablonowe i elementy zablokowane.
 4. Przed implementacją pokaż krótki plan kolejności. Nie czekaj na dodatkowe potwierdzenie, jeśli polecenie użytkownika jest jednoznaczne i nie ma konfliktu zakresu.
@@ -25,6 +25,7 @@ Dla każdego kolejnego milestone'u:
 6. Jeśli review wykryje problemy mieszczące się w zakresie, popraw je zgodnie z `$codex-flow-address-review`, ponów walidację i sprawdź rozwiązanie problemów blokujących.
 7. Oznacz milestone jako `done` dopiero po spełnieniu kryteriów akceptacji, pozytywnej walidacji i usunięciu problemów blokujących.
 8. Zaktualizuj `STATUS.md` i przejdź do następnego `planned` bez ponownego pytania użytkownika.
+9. Uruchom `./scripts/check-context-size.sh`. Jeśli pojawi się ostrzeżenie, użyj `$codex-flow-compact-context` przed rozpoczęciem kolejnego milestone'u.
 
 ## Warunki zatrzymania
 
@@ -41,6 +42,6 @@ W takim przypadku oznacz właściwy milestone jako `blocked` tylko wtedy, gdy bl
 
 ## Zakończenie
 
-Po wyczerpaniu milestone'ów `planned` uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, review i pozostałe ryzyka.
+Po wyczerpaniu milestone'ów `planned` uporządkuj przekroczone pliki kontekstu, uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, review i pozostałe ryzyka.
 
 Nie wykonuj commita ani pusha bez osobnego, jawnego polecenia użytkownika.
