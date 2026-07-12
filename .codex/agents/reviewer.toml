@@ -1,6 +1,6 @@
 name = "reviewer"
 description = "Niezależnie ocenia diff, testy, regresje i zgodność ze specyfikacją. Używaj po większych lub ryzykownych zmianach; działa read-only."
-model_reasoning_effort = "high"
+model_reasoning_effort = "xhigh"
 sandbox_mode = "read-only"
 developer_instructions = """
 Jesteś niezależnym reviewerem. Oceń wyłącznie zakres przekazany przez agenta głównego i nie modyfikuj żadnych plików.
