@@ -1,6 +1,6 @@
 ---
 name: codex-flow-run-roadmap
-description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze statusem planned z ROADMAP.md. Użyj, gdy użytkownik jawnie prosi o realizację całej roadmapy, wszystkich zaplanowanych milestone'ów albo autonomiczną pracę aż do ukończenia planu lub napotkania blokera.
+description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze statusem planned z ROADMAP.md przez sekwencyjną implementację agentem sol_implementer i niezależne review świeżym agentem sol_reviewer. Użyj, gdy użytkownik jawnie prosi o realizację całej roadmapy, wszystkich zaplanowanych milestone'ów albo autonomiczną pracę aż do ukończenia planu lub napotkania blokera.
 ---
 
 # Wykonanie roadmapy
@@ -11,37 +11,40 @@ description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze s
 2. Sprawdź stan repo i nie włączaj do pracy niepowiązanych zmian użytkownika.
 3. Zbierz rzeczywiste milestone'y `planned` w kolejności zależności. Pomiń wpisy szablonowe i elementy zablokowane.
 4. Przed implementacją pokaż krótki plan kolejności. Nie czekaj na dodatkowe potwierdzenie, jeśli polecenie użytkownika jest jednoznaczne i nie ma konfliktu zakresu.
-5. Używaj subagentów tylko do niezależnego planowania, eksploracji lub read-only review, gdy poprawia to jakość albo izoluje szum. Implementację i aktualizacje wspólnych plików prowadź sekwencyjnie.
+5. Główny wątek pełni rolę koordynatora. Nie implementuje kodu; deleguje pracę agentom opisanym poniżej i scala ich wyniki.
+
+## Agenci i kolejność
+
+- Używaj Custom Agenta `sol_implementer` do implementacji i wszystkich późniejszych poprawek. Jego konfiguracja wymusza `gpt-5.6-sol` z `model_reasoning_effort = "medium"`.
+- Używaj Custom Agenta `sol_reviewer` do niezależnego review. Jego konfiguracja wymusza `gpt-5.6-sol` z `model_reasoning_effort = "high"` i tryb read-only.
+- Agenci pracują sekwencyjnie. Nie uruchamiaj implementacji i review równolegle.
+- Dla każdego milestone'u utwórz jeden wątek `sol_implementer` i zachowaj go do końca pracy nad tym milestone'em.
+- Po implementacji oraz po każdej rundzie poprawek utwórz nowy, świeży wątek `sol_reviewer`. Nie wznawiaj wcześniejszego reviewera.
+- Nie zastępuj wskazanych Custom Agents agentami wbudowanymi ani pracą głównego wątku.
 
 ## Pętla milestone'ów
 
 Dla każdego kolejnego milestone'u:
 
 1. Potwierdź cel, zakres, poza zakresem, kryteria akceptacji, walidację i warunki zatrzymania.
-2. Oznacz milestone jako `in_progress` i zaktualizuj krótki stan w `STATUS.md`.
-3. Zaimplementuj wyłącznie jego zakres zgodnie z `$codex-flow-implement-milestone`.
-4. Uruchom walidację zmienionego obszaru oraz `./scripts/verify.sh`, jeśli jest adekwatny.
-5. Wykonaj niezależne read-only review zgodnie z `$codex-flow-review`; preferuj subagenta `reviewer`, jeśli jest dostępny.
-6. Jeśli review wykryje problemy mieszczące się w zakresie, popraw je zgodnie z `$codex-flow-address-review`, ponów walidację i sprawdź rozwiązanie problemów blokujących.
-7. Oznacz milestone jako `done` dopiero po spełnieniu kryteriów akceptacji, pozytywnej walidacji i usunięciu problemów blokujących.
-8. Zaktualizuj `STATUS.md` i przejdź do następnego `planned` bez ponownego pytania użytkownika.
-9. Uruchom `./scripts/check-context-size.sh`. Jeśli pojawi się ostrzeżenie, użyj `$codex-flow-compact-context` przed rozpoczęciem kolejnego milestone'u.
+2. Utwórz wątek `sol_implementer`. Przekaż pełny zakres milestone'u, kryteria akceptacji, właściwy kontekst z dokumentacji, stan bazowy repozytorium, wcześniejsze zmiany użytkownika, ryzyka i wymagane walidacje.
+3. Poleć implementerowi oznaczyć milestone jako `in_progress`, zaktualizować zwięzły stan w `STATUS.md` i wykonać `$codex-flow-implement-milestone`. Poczekaj na zakończenie implementacji i wymaganych walidacji.
+4. Zbierz aktualny diff, podsumowanie implementera oraz wyniki walidacji. Utwórz świeży wątek `sol_reviewer` i poleć mu wykonać `$codex-flow-review` dla całego diffu.
+5. Wymagaj raportu zakończonego dokładnie jedną decyzją: `DECISION: APPROVED` albo `DECISION: CHANGES_REQUIRED`.
+6. Gdy decyzja to `CHANGES_REQUIRED`, przekaż pełny raport do tego samego wątku implementera. Poleć wykonać `$codex-flow-address-review`, ponowić walidację i odpowiedzieć na każde znalezisko.
+7. Po poprawkach utwórz kolejny świeży wątek `sol_reviewer`. Przekaż pierwotne kryteria, wcześniejsze znaleziska i odpowiedzi implementera, pełny aktualny diff oraz aktualne wyniki walidacji. Reviewer ponownie ocenia cały diff.
+8. Powtarzaj sekwencję `ten sam sol_implementer -> świeży sol_reviewer` do `APPROVED`, maksymalnie przez trzy rundy poprawek. Jeśli po trzeciej rundzie nadal jest `CHANGES_REQUIRED`, zatrzymaj workflow i zgłoś nierozwiązane problemy.
+9. Po `APPROVED` poleć temu samemu implementerowi oznaczyć milestone jako `done` wyłącznie po spełnieniu kryteriów i pozytywnej walidacji oraz zaktualizować `STATUS.md` bez innych zmian kodu.
+10. Sprawdź końcowy diff, status repozytorium i rozmiar kontekstu, po czym przejdź do następnego `planned` bez ponownego pytania użytkownika.
 
 ## Warunki zatrzymania
 
-Zatrzymaj pętlę i zachowaj bezpieczny stan, gdy:
+Zatrzymaj pętlę i zachowaj bezpieczny stan, gdy wymaganie istotnie zmienia produkt lub zakres, walidacja nie przechodzi i naprawa wykracza poza bieżący milestone, review wykryje nierozwiązany problem blokujący, limit trzech rund poprawek zostanie wyczerpany, brakuje zależności lub sekretu, występują nieoczekiwane zmiany albo użytkownik zmieni zadanie.
 
-- wymaganie jest niejednoznaczne i decyzja istotnie zmienia produkt lub zakres,
-- walidacja nie przechodzi, a naprawa wymaga pracy poza bieżącym milestone'em,
-- review wykryje nierozwiązany problem blokujący,
-- zależność lub sekret uniemożliwia dalszą pracę,
-- working tree zawiera nieoczekiwane zmiany, których nie można bezpiecznie odseparować,
-- użytkownik przerwie albo zmieni zadanie.
-
-W takim przypadku oznacz właściwy milestone jako `blocked` tylko wtedy, gdy blokada jest rzeczywista, opisz ją w `STATUS.md` i podaj konkretną decyzję lub działanie potrzebne do wznowienia.
+Oznacz milestone jako `blocked` tylko dla rzeczywistej blokady i zapisz konkretną decyzję lub działanie potrzebne do wznowienia. Nie ogłaszaj sukcesu bez `DECISION: APPROVED`, spełnionych kryteriów i pozytywnej walidacji.
 
 ## Zakończenie
 
-Po wyczerpaniu milestone'ów `planned` uporządkuj przekroczone pliki kontekstu, uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, review i pozostałe ryzyka.
+Po wyczerpaniu milestone'ów `planned` uporządkuj przekroczone pliki kontekstu, uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, liczbę rund review, końcowe decyzje i pozostałe ryzyka.
 
 Nie wykonuj commita ani pusha bez osobnego, jawnego polecenia użytkownika.

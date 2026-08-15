@@ -61,16 +61,17 @@ Przeprowadź ze mną wywiad. Zadawaj jedno pytanie naraz, aż poznasz kontekst p
 | `codex-flow-implement-milestone` | Implementacja jednego, jawnie wskazanego milestone'u |
 | `codex-flow-review` | Niezależne, read-only review ostatnich zmian |
 | `codex-flow-address-review` | Minimalne poprawki wynikające z review |
-| `codex-flow-run-roadmap` | Sekwencyjna realizacja wszystkich milestone'ów `planned` z walidacją i review |
+| `codex-flow-run-roadmap` | Koordynowana realizacja wszystkich milestone'ów `planned` przez implementera i świeżych reviewerów |
 | `codex-flow-compact-context` | Kompakcja przerośniętych plików kontekstu bez utraty aktywnych ustaleń |
 | `codex-flow-publish` | Dokumentacja, commit i opcjonalny push na jawne polecenie |
 
 ## Subagenci
 
 - `planner` — analizuje PRD, specyfikację i roadmapę; nie implementuje.
-- `reviewer` — ocenia diff, testy i zgodność zakresu w trybie read-only.
+- `sol_implementer` — implementuje jeden milestone i wszystkie wynikające z review poprawki; używa `gpt-5.6-sol` z reasoning `medium`.
+- `sol_reviewer` — niezależnie ocenia cały diff w trybie read-only; używa `gpt-5.6-sol` z reasoning `high`.
 
-Główny agent prowadzi implementację i orkiestrację. Nie ma osobnych agentów implementacyjnego, operacyjnego ani orkiestratora, ponieważ ich odpowiedzialności dublowały natywne zachowanie Codex lub tworzyły niepotrzebne handoffy.
+W `$codex-flow-run-roadmap` główny agent jest wyłącznie koordynatorem. Dla każdego milestone'u zachowuje jeden wątek `sol_implementer`, a po implementacji i każdej rundzie poprawek uruchamia świeży wątek `sol_reviewer`. Poza tym workflow agenci są używani tylko wtedy, gdy pasują do zakresu zadania.
 
 ## Walidacja
 
