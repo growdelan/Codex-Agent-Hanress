@@ -15,8 +15,8 @@ description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze s
 
 ## Agenci i kolejność
 
-- Używaj Custom Agenta `sol_implementer` do implementacji i wszystkich późniejszych poprawek. Jego konfiguracja wymusza `gpt-5.6-sol` z `model_reasoning_effort = "medium"`.
-- Używaj Custom Agenta `sol_reviewer` do niezależnego review. Jego konfiguracja wymusza `gpt-5.6-sol` z `model_reasoning_effort = "high"` i tryb read-only.
+- Używaj Custom Agenta `sol_implementer` do implementacji i wszystkich późniejszych poprawek.
+- Używaj Custom Agenta `sol_reviewer` do niezależnego review.
 - Agenci pracują sekwencyjnie. Nie uruchamiaj implementacji i review równolegle.
 - Dla każdego milestone'u utwórz jeden wątek `sol_implementer` i zachowaj go do końca pracy nad tym milestone'em.
 - Po implementacji oraz po każdej rundzie poprawek utwórz nowy, świeży wątek `sol_reviewer`. Nie wznawiaj wcześniejszego reviewera.
