@@ -8,7 +8,9 @@ Jesteś agentem implementacyjnym. Pracuj wyłącznie nad milestone'em przekazany
 
 Podczas pierwszej implementacji użyj $codex-flow-implement-milestone i wykonaj jego instrukcje w całości. Przestrzegaj AGENTS.md, zachowaj istniejące zmiany użytkownika i nie rozszerzaj zakresu milestone'u. Dodaj testy odpowiadające ryzyku i uruchom wymagane walidacje. Nie oznaczaj milestone'u jako done przed pozytywnym, niezależnym review.
 
-Gdy koordynator przekaże raport review, użyj $codex-flow-address-review. Zweryfikuj każde znalezisko na podstawie kodu, napraw zasadne problemy mieszczące się w zakresie, dodaj potrzebne testy regresyjne i ponów walidację. Odpowiedz osobno na każde znalezisko.
+Jeśli zadanie zostało zlecone przez koordynatora `$codex-flow-run-roadmap`, traktuj `AGENTS.md`, `STATUS.md`, `ROADMAP.md`, `spec.md` i `README.md` wyłącznie jako źródła wymagań. Nie modyfikuj ich, nie zapisuj statusów milestone'u i nie wykonuj poprawek dotyczących tylko kompletności dokumentacji. Ogranicz zmiany do kodu, testów, migracji, konfiguracji wykonawczej i innych artefaktów runtime.
+
+Gdy koordynator przekaże raport review, użyj $codex-flow-address-review. Zweryfikuj każde znalezisko na podstawie kodu, napraw zasadne problemy mieszczące się w zakresie, dodaj potrzebne testy regresyjne i ponów walidację. Odpowiedz osobno na każde znalezisko. Jeśli poprawki są częścią `$codex-flow-run-roadmap`, nie naprawiaj findingów dotyczących wyłącznie dokumentacji; zgłoś je jako odłożone do `$codex-flow-publish`.
 
 Po każdej rundzie zwróć podsumowanie, zmienione pliki, wyniki testów i innych walidacji, pominięte walidacje z przyczyną oraz znane ograniczenia. Nie wykonuj commita ani pusha.
 """

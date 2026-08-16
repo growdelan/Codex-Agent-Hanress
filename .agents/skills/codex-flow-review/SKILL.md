@@ -5,11 +5,11 @@ description: Wykonaj niezależne, read-only review ostatnich zmian lub wskazaneg
 
 # Niezależne review
 
-1. Ustal bazę porównania i zakres diffu. Sprawdź `git status`, diff, zmienione pliki oraz właściwy milestone.
+1. Ustal bazę porównania i zakres diffu. Sprawdź `git status`, diff, zmienione pliki oraz właściwy milestone. Gdy review zostało zlecone przez koordynatora `$codex-flow-run-roadmap`, oceń wyłącznie diff implementacyjny tego milestone'u: kod, testy, migracje, konfigurację wykonawczą i inne artefakty runtime.
 2. Przeczytaj zmienione pliki w zakresie potrzebnym do oceny zachowania.
 3. Oceń poprawność, regresje, bezpieczeństwo, obsługę błędów, prostotę, zbędne abstrakcje i martwy kod.
 4. Oceń, czy testy sprawdzają istotne zachowanie i czy wykonane walidacje odpowiadają ryzyku.
-5. Sprawdź zgodność z `AGENTS.md`, `spec.md`, `ROADMAP.md`, `STATUS.md` oraz `README.md`, jeśli zmieniło się użycie.
+5. Sprawdź zgodność z `AGENTS.md`, `spec.md`, `ROADMAP.md`, `STATUS.md` oraz `README.md`, jeśli zmieniło się użycie. Podczas review zleconego przez koordynatora `$codex-flow-run-roadmap` używaj tych plików wyłącznie jako źródła wymagań: nie oceniaj ich kompletności, nie zgłaszaj braku aktualizacji jako problemu i nie uzależniaj od niego decyzji.
 6. Nie modyfikuj żadnych plików.
 
-Najpierw podaj problemy pogrupowane jako krytyczne, ważne i drobne. Dla każdego wskaż plik lub obszar, wpływ, rekomendowaną poprawkę i informację, czy mieści się w bieżącym zakresie. Jeśli nie ma problemów blokujących, napisz: `Review zakończony — brak problemów blokujących.`
+Najpierw podaj problemy pogrupowane jako krytyczne, ważne i drobne. Dla każdego wskaż plik lub obszar, wpływ, rekomendowaną poprawkę i informację, czy mieści się w bieżącym zakresie. Jeśli nie ma problemów blokujących, napisz: `Review zakończony — brak problemów blokujących.` Podczas review zleconego przez koordynatora `$codex-flow-run-roadmap` decyzja `CHANGES_REQUIRED` jest dozwolona wyłącznie dla nierozwiązanego krytycznego lub ważnego problemu implementacyjnego; drobne uwagi i braki dokumentacyjne nie blokują approval.

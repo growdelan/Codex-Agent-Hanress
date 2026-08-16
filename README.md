@@ -36,8 +36,9 @@ Po skopiowaniu:
 4. Realizuj jeden uzgodniony milestone przez `$codex-flow-implement-milestone`.
 5. Dla większych lub ryzykownych zmian wykonaj `$codex-flow-review`.
 6. Jeśli review wykryje problemy, użyj `$codex-flow-address-review`.
-7. Jeśli chcesz wykonać wszystkie zaplanowane milestone'y w kontrolowanej pętli, użyj `$codex-flow-run-roadmap`.
-8. Publikuj zmianę przez `$codex-flow-publish` tylko na jawne polecenie dotyczące commita lub pusha.
+7. Jeśli chcesz wykonać wszystkie zaplanowane milestone'y w kontrolowanej pętli code-only, użyj `$codex-flow-run-roadmap`.
+8. Po zakończeniu pętli przekaż jej handoff do `$codex-flow-publish`, aby jednorazowo zsynchronizować dokumentację i przygotować zmianę do publikacji.
+9. Jeśli używasz `github:yeet`, uruchom go dopiero po `$codex-flow-publish`, aby wykonać staging, commit, push i utworzyć draft PR.
 
 Przy powrocie do projektu użyj `$codex-flow-resume`.
 
@@ -61,17 +62,17 @@ Przeprowadź ze mną wywiad. Zadawaj jedno pytanie naraz, aż poznasz kontekst p
 | `codex-flow-implement-milestone` | Implementacja jednego, jawnie wskazanego milestone'u |
 | `codex-flow-review` | Niezależne, read-only review ostatnich zmian |
 | `codex-flow-address-review` | Minimalne poprawki wynikające z review |
-| `codex-flow-run-roadmap` | Koordynowana realizacja wszystkich milestone'ów `planned` przez implementera i świeżych reviewerów |
+| `codex-flow-run-roadmap` | Koordynowana implementacja i code review wszystkich milestone'ów `planned`, bez aktualizacji dokumentacji w pętli |
 | `codex-flow-compact-context` | Kompakcja przerośniętych plików kontekstu bez utraty aktywnych ustaleń |
 | `codex-flow-publish` | Dokumentacja, commit i opcjonalny push na jawne polecenie |
 
 ## Subagenci
 
 - `planner` — analizuje PRD, specyfikację i roadmapę; nie implementuje.
-- `sol_implementer` — implementuje jeden milestone i wszystkie wynikające z review poprawki; używa `gpt-5.6-sol` z reasoning `medium`.
-- `sol_reviewer` — niezależnie ocenia cały diff w trybie read-only; używa `gpt-5.6-sol` z reasoning `high`.
+- `sol_implementer` — implementuje jeden milestone i wszystkie wynikające z review poprawki; w zadaniach z `$codex-flow-run-roadmap` nie aktualizuje dokumentacji; używa `gpt-5.6-sol` z reasoning `medium`.
+- `sol_reviewer` — niezależnie ocenia diff implementacyjny milestone'u w trybie read-only; w review zleconym przez `$codex-flow-run-roadmap` braki dokumentacyjne nie są findingami; używa `gpt-5.6-sol` z reasoning `high`.
 
-W `$codex-flow-run-roadmap` główny agent jest wyłącznie koordynatorem. Dla każdego milestone'u zachowuje jeden wątek `sol_implementer`, a po implementacji i każdej rundzie poprawek uruchamia świeży wątek `sol_reviewer`. Poza tym workflow agenci są używani tylko wtedy, gdy pasują do zakresu zadania.
+W `$codex-flow-run-roadmap` główny agent jest wyłącznie koordynatorem. Dla każdego milestone'u zachowuje jeden wątek `sol_implementer`, a po implementacji i każdej rundzie poprawek uruchamia świeży wątek `sol_reviewer`. Dokumentacja jest w tej pętli źródłem kryteriów, ale jej aktualizacja jest odłożona do jednorazowej finalizacji przez `$codex-flow-publish`. Zalecana kolejność publikacji to `$codex-flow-run-roadmap` → `$codex-flow-publish` → `github:yeet`. Poza tym workflow agenci są używani tylko wtedy, gdy pasują do zakresu zadania.
 
 ## Walidacja
 

@@ -12,6 +12,6 @@ description: Implementuj jeden konkretny milestone lub jasno ograniczone zadanie
 5. Zaimplementuj wyłącznie uzgodniony zakres małymi, precyzyjnymi zmianami.
 6. Dodaj lub popraw testy odpowiadające ryzyku zmiany.
 7. Uruchom komendy walidacyjne z repo, domyślnie `./scripts/verify.sh`.
-8. Zaktualizuj `STATUS.md`, jeżeli zmiana jest istotna lub praca pozostaje niedomknięta.
+8. Zaktualizuj `STATUS.md`, jeżeli zmiana jest istotna lub praca pozostaje niedomknięta. Gdy zadanie zostało zlecone przez koordynatora `$codex-flow-run-roadmap`, pomiń zapis dokumentacji: `AGENTS.md`, `STATUS.md`, `ROADMAP.md`, `spec.md` i `README.md` są wtedy tylko źródłami wymagań, a implementacja nie może ich modyfikować.
 
 Nie wykonuj commita ani pusha. W wyniku podaj zmienione pliki, walidacje, ograniczenia i ewentualne problemy wymagające review.
