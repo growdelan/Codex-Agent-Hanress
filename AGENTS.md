@@ -12,7 +12,7 @@
 - Bieżący stan, ostatnią walidację, blokery i następny krok zapisuj w `STATUS.md`.
 - Czytaj tylko pliki potrzebne do aktualnej decyzji. Przy kontynuacji zacznij od `STATUS.md` i właściwego fragmentu `ROADMAP.md`.
 - Traktuj limity kontekstu jako progi ostrzegawcze: `STATUS.md` 150 linii / 12 KB, `ROADMAP.md` 350 linii / 30 KB, `spec.md` 500 linii / 40 KB.
-- Gdy dokument przekracza próg, użyj `$codex-flow-compact-context` przed dalszym rozbudowywaniem go.
+- Gdy dokument przekracza próg, wykonaj kompakcję automatycznie tylko podczas `$codex-flow-plan-from-prd` albo jawnie uruchomionego `$codex-flow-compact-context`. W pozostałych workflow zgłoś ją jako osobny rekomendowany krok i nie rozszerzaj bieżącego diffu.
 - Nie czytaj `docs/archive/` podczas zwykłego resume, planowania ani implementacji, chyba że bieżąca decyzja wymaga historii.
 - Ukończone szczegóły roadmapy archiwizuj w `docs/archive/roadmap/`; szczegóły aktualnej specyfikacji dziel między `docs/spec/` i `docs/decisions/`, zachowując `spec.md` jako indeks aktualnej prawdy.
 

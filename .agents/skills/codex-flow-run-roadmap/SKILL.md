@@ -45,6 +45,6 @@ Oznacz milestone jako `blocked` tylko dla rzeczywistej blokady i zapisz konkretn
 
 ## Zakończenie
 
-Po wyczerpaniu milestone'ów `planned` uporządkuj przekroczone pliki kontekstu, uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, liczbę rund review, końcowe decyzje i pozostałe ryzyka.
+Po wyczerpaniu milestone'ów `planned` uruchom pełną dostępną walidację, sprawdź spójność `ROADMAP.md`, `STATUS.md`, `spec.md` i `README.md`, a następnie podsumuj ukończone milestone'y, testy, liczbę rund review, końcowe decyzje i pozostałe ryzyka. Jeśli kontrola rozmiaru zgłasza ostrzeżenia, wskaż `$codex-flow-compact-context` jako osobny następny krok; nie rozszerzaj diffu roadmapy o kompakcję.
 
 Nie wykonuj commita ani pusha bez osobnego, jawnego polecenia użytkownika.
