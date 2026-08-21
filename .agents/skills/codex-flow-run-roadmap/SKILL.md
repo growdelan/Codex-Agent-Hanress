@@ -1,6 +1,6 @@
 ---
 name: codex-flow-run-roadmap
-description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze statusem planned z ROADMAP.md przez sekwencyjną implementację agentem sol_implementer i niezależne review świeżym agentem sol_reviewer. Użyj, gdy użytkownik jawnie prosi o realizację całej roadmapy, wszystkich zaplanowanych milestone'ów albo autonomiczną pracę aż do ukończenia planu lub napotkania blokera.
+description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze statusem planned z ROADMAP.md przez stały duet sol_implementer i sol_reviewer dla każdego milestone'u, kończąc zatwierdzony milestone osobnym lokalnym commitem. Użyj, gdy użytkownik jawnie prosi o realizację całej roadmapy, wszystkich zaplanowanych milestone'ów albo autonomiczną pracę aż do ukończenia planu lub napotkania blokera.
 ---
 
 # Wykonanie roadmapy
@@ -26,7 +26,7 @@ description: Wykonaj w kontrolowanej pętli wszystkie wykonalne milestone'y ze s
 - Używaj Custom Agenta `sol_reviewer` do niezależnego review.
 - Agenci pracują sekwencyjnie. Nie uruchamiaj implementacji i review równolegle.
 - Dla każdego milestone'u utwórz jeden wątek `sol_implementer` i zachowaj go do końca pracy nad tym milestone'em.
-- Po implementacji oraz po każdej rundzie poprawek utwórz nowy, świeży wątek `sol_reviewer`. Nie wznawiaj wcześniejszego reviewera.
+- Dla każdego milestone'u utwórz jeden wątek `sol_reviewer` i wznawiaj go po każdej rundzie poprawek aż do końca pracy nad tym milestone'em.
 - Nie zastępuj wskazanych Custom Agents agentami wbudowanymi ani pracą głównego wątku.
 
 ## Pętla milestone'ów
@@ -36,13 +36,14 @@ Dla każdego kolejnego milestone'u:
 1. Potwierdź cel, zakres, poza zakresem, kryteria akceptacji, walidację i warunki zatrzymania.
 2. Zanotuj stan bazowy i rozdziel wcześniejsze zmiany użytkownika oraz zatwierdzone zmiany poprzednich milestone'ów od diffu bieżącego milestone'u.
 3. Utwórz wątek `sol_implementer`. Zaznacz, że zadanie jest częścią `$codex-flow-run-roadmap`, przekaż pełny zakres milestone'u, kryteria akceptacji, właściwy kontekst z dokumentacji, stan bazowy repozytorium, wcześniejsze zmiany użytkownika, ryzyka i wymagane walidacje. Poleć wykonać `$codex-flow-implement-milestone` bez zmian dokumentacji i poczekaj na zakończenie implementacji oraz walidacji.
-4. Zbierz diff implementacyjny bieżącego milestone'u, podsumowanie implementera oraz wyniki walidacji. Utwórz świeży wątek `sol_reviewer`, zaznacz, że review jest częścią `$codex-flow-run-roadmap`, i poleć wykonać `$codex-flow-review` wyłącznie dla tego diffu.
+4. Zbierz diff implementacyjny bieżącego milestone'u, podsumowanie implementera oraz wyniki walidacji. Utwórz wątek `sol_reviewer`, zaznacz, że review jest częścią `$codex-flow-run-roadmap`, i poleć wykonać `$codex-flow-review` wyłącznie dla tego diffu.
 5. Wymagaj raportu zakończonego dokładnie jedną decyzją: `DECISION: APPROVED` albo `DECISION: CHANGES_REQUIRED`.
 6. Gdy decyzja to `CHANGES_REQUIRED`, przekaż pełny raport do tego samego wątku implementera. Przypomnij, że poprawki są częścią `$codex-flow-run-roadmap`, poleć wykonać `$codex-flow-address-review`, poprawić wyłącznie zasadne problemy implementacyjne, ponowić walidację i odpowiedzieć na każde znalezisko.
-7. Po poprawkach utwórz kolejny świeży wątek `sol_reviewer`. Zaznacz, że review jest częścią `$codex-flow-run-roadmap`, przekaż pierwotne kryteria, wcześniejsze znaleziska i odpowiedzi implementera, pełny aktualny diff implementacyjny milestone'u oraz aktualne wyniki walidacji. Reviewer ponownie ocenia cały diff implementacyjny.
-8. Powtarzaj sekwencję `ten sam sol_implementer -> świeży sol_reviewer` do `APPROVED`, maksymalnie przez trzy rundy poprawek. Jeśli po trzeciej rundzie nadal jest `CHANGES_REQUIRED`, zatrzymaj workflow i zgłoś nierozwiązane problemy.
+7. Po poprawkach wznów ten sam wątek `sol_reviewer`. Zaznacz, że ponowne review jest częścią `$codex-flow-run-roadmap`, przekaż pierwotne kryteria, wcześniejsze znaleziska i odpowiedzi implementera, pełny aktualny diff implementacyjny milestone'u oraz aktualne wyniki walidacji. Reviewer ponownie ocenia cały diff implementacyjny.
+8. Powtarzaj sekwencję `ten sam sol_implementer -> ten sam sol_reviewer` do `APPROVED`, maksymalnie przez trzy rundy poprawek. Jeśli po trzeciej rundzie nadal jest `CHANGES_REQUIRED`, zatrzymaj workflow i zgłoś nierozwiązane problemy.
 9. Po `APPROVED` zapisz decyzję i wyniki walidacji w pamięci koordynatora. Nie uruchamiaj implementera wyłącznie w celu finalizacji statusu lub dokumentacji.
-10. Sprawdź końcowy diff implementacyjny i status repozytorium, po czym przejdź do następnego elementu początkowej listy bez ponownego pytania użytkownika.
+10. Sprawdź końcowy diff implementacyjny i pozytywny wynik walidacji. Stage'uj wyłącznie zmiany bieżącego milestone'u i utwórz osobny, logiczny commit nazwany zgodnie z milestone'em. Jeśli zmian milestone'u nie da się bezpiecznie oddzielić od wcześniejszych zmian użytkownika, zatrzymaj workflow zamiast włączać je do commita.
+11. Sprawdź status repozytorium i potwierdź, że pozostały worktree odpowiada stanowi bazowemu sprzed milestone'u, po czym przejdź do następnego elementu początkowej listy bez ponownego pytania użytkownika.
 
 ## Warunki zatrzymania
 
@@ -64,4 +65,4 @@ Zwróć handoff do `$codex-flow-publish` zawierający:
 
 Jeśli kontrola rozmiaru zgłasza ostrzeżenia, dodaj `$codex-flow-compact-context` jako osobny rekomendowany krok w handoffie; nie rozszerzaj diffu roadmapy o kompakcję.
 
-Nie wykonuj commita ani pusha bez osobnego, jawnego polecenia użytkownika.
+Uruchomienie `$codex-flow-run-roadmap` autoryzuje koordynatora do lokalnego commita po każdym zatwierdzonym milestone'ie zgodnie z powyższymi zasadami. Nigdy nie wykonuj pusha bez osobnego, jawnego polecenia użytkownika.
